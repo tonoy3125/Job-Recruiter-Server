@@ -29,6 +29,29 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+
+
+        // Collections
+        const jobCollection = client.db("jobDB").collection("job")
+
+
+
+        // Add a Job Post Method*
+        app.post('/job', async (req, res) => {
+            try {
+                const newJob = req.body;
+                console.log('added this job', newJob);
+                const result = await jobCollection.insertOne(newJob);
+                res.send(result);
+            } catch (error) {
+                // Handle the error
+                console.error('Error adding job:', error);
+            }
+        });
+
+
+
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
