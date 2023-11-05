@@ -35,6 +35,18 @@ async function run() {
         const jobCollection = client.db("jobDB").collection("job")
 
 
+
+        // Get jobs by category_name
+        app.get('/job/:category_name', async (req, res) => {
+            const categoryName = req.params.category_name
+            const query = { category_name: categoryName }
+            const cursor = jobCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+
+
         // Add a Job Get Method*
         app.get('/job', async (req, res) => {
             const cursor = jobCollection.find()
