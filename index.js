@@ -35,6 +35,12 @@ async function run() {
         const jobCollection = client.db("jobDB").collection("job")
 
 
+        // Add a Job Get Method*
+        app.get('/job', async (req, res) => {
+            const cursor = jobCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
 
         // Add a Job Post Method*
         app.post('/job', async (req, res) => {
