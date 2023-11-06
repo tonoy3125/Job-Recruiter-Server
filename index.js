@@ -37,25 +37,47 @@ async function run() {
 
 
 
-        
+        // Get Bid By email
+
+        app.get('/bid/:useremail', async (req, res) => {
+            try {
+                const find = req.params.useremail;
+                console.log(find);
+                const query = { useremail: find };
+                const cursor = bidCollection.find(query);
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+            }
+        });
 
 
         // Get method
 
         app.get('/bid', async (req, res) => {
-            const cursor = bidCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
+            try {
+                const cursor = bidCollection.find()
+                const result = await cursor.toArray()
+                res.send(result)
+            } catch (error) {
+                console.error(error)
+            }
         })
 
         // Post Method
 
         app.post('/bid', async (req, res) => {
-            const newbid = req.body;
-            console.log('added this bid', newbid)
-            const result = await bidCollection.insertOne(newbid);
-            res.send(result)
-        })
+            try {
+                const newBid = req.body;
+                console.log('Added this bid', newBid);
+                const result = await bidCollection.insertOne(newBid);
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
 
         // Get jobs By id
         app.get('/jobs/:id', async (req, res) => {
