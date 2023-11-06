@@ -36,30 +36,60 @@ async function run() {
 
         // Get jobs By id
         app.get('/jobs/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: new ObjectId(id) }
-            const cursor = jobCollection.find(query)
-            const result = await cursor.toArray()
-            res.send(result)
+            try {
+                const id = req.params.id
+                const query = { _id: new ObjectId(id) }
+                const cursor = jobCollection.find(query)
+                const result = await cursor.toArray()
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error)
+            }
         })
 
         // Get jobs by category_name
         app.get('/job/:category_name', async (req, res) => {
-            const categoryName = req.params.category_name
-            const query = { category_name: categoryName }
-            const cursor = jobCollection.find(query)
-            const result = await cursor.toArray()
-            res.send(result)
+            try {
+                const categoryName = req.params.category_name
+                const query = { category_name: categoryName }
+                const cursor = jobCollection.find(query)
+                const result = await cursor.toArray()
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error)
+            }
         })
 
 
 
         // Add a Job Get Method*
         app.get('/job', async (req, res) => {
-            const cursor = jobCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
+            try {
+                const cursor = jobCollection.find()
+                const result = await cursor.toArray()
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error)
+            }
         })
+
+
+        app.get('/postedjob/:email', async (req, res) => {
+            try {
+                const find = req.params.email;
+                console.log(find);
+                const query = { email: find };
+                const cursor = jobCollection.find(query);
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
 
         // Add a Job Post Method*
         app.post('/job', async (req, res) => {
