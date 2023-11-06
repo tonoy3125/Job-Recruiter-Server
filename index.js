@@ -76,7 +76,7 @@ async function run() {
             }
         })
 
-
+        // Get Job by email
         app.get('/postedjob/:email', async (req, res) => {
             try {
                 const find = req.params.email;
@@ -101,6 +101,19 @@ async function run() {
             } catch (error) {
                 // Handle the error
                 console.error('Error adding job:', error);
+            }
+        });
+
+
+        app.delete('/jobs/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) };
+                const result = await jobCollection.deleteOne(query);
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
             }
         });
 
