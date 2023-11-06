@@ -104,7 +104,48 @@ async function run() {
             }
         });
 
+        // Get a product for update
+        app.get('/jobupdate/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const result = await jobCollection.findOne(query)
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error);
+            }
+        })
 
+
+
+        // Put a product for update
+        app.put('/jobs/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const filter = { _id: new ObjectId(id) }
+                const options = { upsert: true };
+                const updatedJob = req.body
+                const jobs = {
+                    $set: {
+                        name: updatedJob.name,
+                        category_name: updatedJob.category_name,
+                        email: updatedJob.email,
+                        deadline: updatedJob.deadline,
+                        minimum_price: updatedJob.minimum_price,
+                        maximum_price: updatedJob.maximum_price,
+                        description: updatedJob.description
+                    }
+                }
+                const result = await jobCollection.updateOne(filter, jobs, options)
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error);
+            }
+        })
+
+        // Delete a job
         app.delete('/jobs/:id', async (req, res) => {
             try {
                 const id = req.params.id;
@@ -113,7 +154,6 @@ async function run() {
                 res.send(result);
             } catch (error) {
                 console.error(error);
-                res.status(500).send('Internal Server Error');
             }
         });
 
