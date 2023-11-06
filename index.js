@@ -39,6 +39,15 @@ async function run() {
 
         
 
+
+        // Get method
+
+        app.get('/bid', async (req, res) => {
+            const cursor = bidCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
         // Post Method
 
         app.post('/bid', async (req, res) => {
