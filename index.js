@@ -33,6 +33,20 @@ async function run() {
 
         // Collections
         const jobCollection = client.db("jobDB").collection("job")
+        const bidCollection = client.db("jobDB").collection("bid")
+
+
+
+        
+
+        // Post Method
+
+        app.post('/bid', async (req, res) => {
+            const newbid = req.body;
+            console.log('added this bid', newbid)
+            const result = await bidCollection.insertOne(newbid);
+            res.send(result)
+        })
 
         // Get jobs By id
         app.get('/jobs/:id', async (req, res) => {
@@ -104,7 +118,7 @@ async function run() {
             }
         });
 
-        // Get a product for update
+        // Get a job for update
         app.get('/jobupdate/:id', async (req, res) => {
             try {
                 const id = req.params.id;
@@ -119,7 +133,7 @@ async function run() {
 
 
 
-        // Put a product for update
+        // Put a job for update
         app.put('/jobs/:id', async (req, res) => {
             try {
                 const id = req.params.id;
