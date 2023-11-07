@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
@@ -13,6 +14,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json())
+app.use(cookieParser())
 
 
 
@@ -28,6 +30,16 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
+
+
+// middlewares
+const logger = (req, res, next) => {
+    console.log('log info', req.method, req.url)
+    next()
+}
+
+
+
 
 async function run() {
     try {
@@ -198,10 +210,10 @@ async function run() {
         })
 
         // Get Job by email
-        app.get('/postedjob/:email', async (req, res) => {
+        app.get('/postedjob/:email', logger, async (req, res) => {
             try {
                 const find = req.params.email;
-                console.log(find);
+                console.log('cook cook', req.cookies);
                 const query = { email: find };
                 const cursor = jobCollection.find(query);
                 const result = await cursor.toArray();
