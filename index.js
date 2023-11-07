@@ -38,6 +38,22 @@ const logger = (req, res, next) => {
     next()
 }
 
+const verifyToken = (req, res, next) => {
+    const token = req?.cookies?.token
+    // console.log('token in the middleware', token)
+    if (!token) {
+        return res.status(401).send({ message: 'unauthorized access' })
+    }
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: 'unauthorized access' })
+        }
+        req.user = decoded
+        next()
+    })
+
+}
+
 
 
 
@@ -210,10 +226,10 @@ async function run() {
         })
 
         // Get Job by email
-        app.get('/postedjob/:email', logger, async (req, res) => {
+        app.get('/postedjob/:email', async (req, res) => {
             try {
                 const find = req.params.email;
-                console.log('cook cook', req.cookies);
+                console.log('token owner info', req.user)
                 const query = { email: find };
                 const cursor = jobCollection.find(query);
                 const result = await cursor.toArray();
