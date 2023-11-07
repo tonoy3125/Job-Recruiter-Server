@@ -37,6 +37,8 @@ async function run() {
 
 
 
+
+
         // Get Bid By Buyer Email
         app.get('/bidjob/bid/:buyeremail', async (req, res) => {
             try {
@@ -67,7 +69,7 @@ async function run() {
         });
 
 
-        // Get method
+        // Bid Get method
 
         app.get('/bid', async (req, res) => {
             try {
@@ -78,6 +80,37 @@ async function run() {
                 console.error(error)
             }
         })
+
+        // Get a bid by Id
+        app.get('/reqbid/bid/:id', async (req, res) => {
+            try {
+                const id = req.params.id
+                const query = { _id: new ObjectId(id) }
+                const cursor = bidCollection.find(query)
+                const result = await cursor.toArray()
+                res.send(result)
+            } catch (error) {
+                // Handle the error
+                console.error(error)
+            }
+        })
+
+
+        // Patch a bid by id
+        app.patch('/reqbid/bid/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const updatedbid = req.body
+            console.log(updatedbid)
+            const updatedoc = {
+                $set: {
+                    status: updatedbid.status
+                }
+            }
+            const result = await bidCollection.updateOne(query, updatedoc)
+            res.send(result)
+        })
+
 
         // Post Method
 
