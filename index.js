@@ -37,7 +37,21 @@ async function run() {
 
 
 
-        // Get Bid By email
+        // Get Bid By Buyer Email
+        app.get('/bidjob/bid/:buyeremail', async (req, res) => {
+            try {
+                const find = req.params.buyeremail;
+                console.log(find);
+                const query = { buyeremail: find };
+                const cursor = bidCollection.find(query);
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        // Get Bid By User email
 
         app.get('/bid/:useremail', async (req, res) => {
             try {
