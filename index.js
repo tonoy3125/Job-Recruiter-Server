@@ -14,8 +14,7 @@ const port = process.env.PORT || 5000
 app.use(cors({
     origin: [
         'http://localhost:5174',
-        'job-recruiter-assignment.web.app',
-        'job-recruiter-assignment.firebaseapp.com'
+        'https://job-recruiter-assignment.web.app'
     ],
     credentials: true
 }))
@@ -137,7 +136,8 @@ app.get('/bid/:useremail', async (req, res) => {
         const find = req.params.useremail;
         console.log(find);
         const query = { useremail: find };
-        const cursor = bidCollection.find(query);
+        const sortBaseOnStatus = { status: 1 };
+        const cursor = bidCollection.find(query).sort(sortBaseOnStatus);
         const result = await cursor.toArray();
         res.send(result);
     } catch (error) {
