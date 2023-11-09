@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000
 // Middleware 
 app.use(cors({
     origin: [
-        'http://localhost:5174',
+        'http://localhost:5173',
         'https://job-recruiter-assignment.web.app'
     ],
     credentials: true
@@ -96,8 +96,8 @@ app.post('/jwt', async (req, res) => {
     res
         .cookie('token', token, {
             httpOnly: true,
-            secure: false,
-            // sameSite: 'none'
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         })
         .send({ success: true })
 })
@@ -105,7 +105,13 @@ app.post('/jwt', async (req, res) => {
 app.post('/logout', async (req, res) => {
     const user = req.body
     console.log('user hitten', user)
-    res.clearCookie('token', { maxAge: 0 }).send({ success: true })
+    res
+        .clearCookie("token", {
+            maxAge: 0,
+            secure: process.env.NODE_ENV === "production" ? true : false,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        })
+        .send({ success: true });
 })
 
 
